@@ -9,7 +9,7 @@ import javax.swing.*;
 public class GameLauncher {
     public static void main(String[] args) {
         JFrame window = createWindow();
-        GameWindow gameWindow = new GameWindow();
+        GameWindow gameWindow = GameWindow.getInstance();
         GameLoop gameLoop = new GameLoop(gameWindow);
 
         window.add(gameWindow);

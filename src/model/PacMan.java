@@ -8,23 +8,26 @@ import java.awt.*;
 import java.io.IOException;
 
 public class PacMan extends GameEntity {
-    public int lives = 3;
-    int score = 0;
+    private int lives = 3;
+    private int score = 0;
     private final GameWindow gameWindow;
     private final InputHandler inputHandler;
 
-    public PacMan(GameWindow gw, InputHandler keyH) {
+    private static PacMan instancePacMan;
+
+    private PacMan(GameWindow gw, InputHandler keyHandler) {
         this.gameWindow = gw;
-
-        this.inputHandler = keyH;
-
-
+        this.inputHandler = keyHandler;
         solidArea = new Rectangle(10, 14, 30, 30);
-        solidAreaDefaultX = solidArea.x;
-        solidAreaDefaultY = solidArea.y;
-
-        setDefaultValues();
         loadPlayerImage();
+        setDefaultValues();
+    }
+
+    public static PacMan getInstance(GameWindow gw, InputHandler keyHandler) {
+        if (instancePacMan == null) {
+            instancePacMan = new PacMan(gw, keyHandler);
+        }
+        return instancePacMan;
     }
 
     public void setDefaultValues() {
@@ -34,30 +37,40 @@ public class PacMan extends GameEntity {
         direction = "down";
     }
 
-    public void loadPlayerImage() {
+    public void move() {
+        if (inputHandler.upPressed) {
+            direction = "up";
+            setPositionY(getPositionY() - speed);
+        } else if (inputHandler.downPressed) {
+            direction = "down";
+            setPositionY(getPositionY() + speed);
+        } else if (inputHandler.leftPressed) {
+            direction = "left";
+            setPositionX(getPositionX() - speed);
+        } else if (inputHandler.rightPressed) {
+            direction = "right";
+            setPositionX(getPositionX() + speed);
+        }
+    }
+
+    private void loadPlayerImage() {
         try {
             up1 = ImageIO.read(getClass().getResourceAsStream("/model/pac_man_up_1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/model/pac_man_up_2.png"));
-            up3 = ImageIO.read(getClass().getResourceAsStream("/model/pac_man_up_3.png"));
             down1 = ImageIO.read(getClass().getResourceAsStream("/model/pac_man_down_1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/model/pac_man_down_2.png"));
-            down3 = ImageIO.read(getClass().getResourceAsStream("/model/pac_man_down_3.png"));
             left1 = ImageIO.read(getClass().getResourceAsStream("/model/pac_man_left_1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/model/pac_man_left_2.png"));
-            left3 = ImageIO.read(getClass().getResourceAsStream("/model/pac_man_left_3.png"));
             right1 = ImageIO.read(getClass().getResourceAsStream("/model/pac_man_right_1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/model/pac_man_right_2.png"));
-            right3 = ImageIO.read(getClass().getResourceAsStream("/model/pac_man_right_3.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     @Override
     public int eaten() {
         lives--;
         return lives;
     }
-}
 
+    public int getLives() {
+        return lives;
+    }
+}

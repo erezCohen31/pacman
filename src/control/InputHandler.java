@@ -8,6 +8,12 @@ public class InputHandler implements KeyListener {
 
 
 
+   private InputHandler(){}
+   static InputHandler instanceKeyH = new InputHandler();
+
+   public static InputHandler getInstance(){
+      return instanceKeyH;
+   }
    @Override
    public void keyTyped(KeyEvent e) {
 

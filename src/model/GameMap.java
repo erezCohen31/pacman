@@ -4,17 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameMap {
-    int width;
-    int height;
-    List<Pellet> pelletList = new ArrayList<>();
-    List<Pair> wallList = new ArrayList<>();
-    List<Fruit> fruitList = new ArrayList<>();
+    private final List<Pellet> pelletList = new ArrayList<>();
+    private final List<Pair> wallList = new ArrayList<>();
+    private final List<Fruit> fruitList = new ArrayList<>();
 
-    void isWall(int x, int y) {
-    }
-
-    int getRemainingPellets() {
+    public int getRemainingPellets() {
         return pelletList.size();
     }
-    void spawnFruit(){}
+
+    public boolean isWall(int x, int y) {
+        // Exemple basique pour vérifier la présence d'un mur
+        return wallList.stream().anyMatch(wall -> wall.equals(new Pair(x, y)));
+    }
+
+    public void spawnFruit() {
+        // Logique d’apparition des fruits
+    }
 }
