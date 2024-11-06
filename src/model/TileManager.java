@@ -4,7 +4,6 @@ package model;
 import view.GameWindow;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +22,7 @@ public class TileManager {
         getTileImage();
 
         try {
-            loadMap("/model/pac_man_pannel.txt");
+            loadMap("/model/pac_man_panel.txt");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -33,9 +32,9 @@ public class TileManager {
 
     public void getTileImage() {
         try {
-            tile[0] = new Tile(ImageIO.read(getClass().getResourceAsStream("/model/blue.png")), false);
+            tile[0] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/blue.png")), false);
 
-            tile[1] = new Tile(ImageIO.read(getClass().getResourceAsStream("/model/black.png")), true);
+            tile[1] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/black.png")), false);
 
             tile[2] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/horizontal.png")), true);
 

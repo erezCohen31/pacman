@@ -13,7 +13,8 @@ public class GameWindow extends JPanel {
     private static final int ROW = 31;
     private final Renderer renderer = new Renderer();
     private static GameWindow instance;
-    TileManager tileManager = new TileManager(this);
+    public TileManager tileManager= new TileManager(this);
+
 
 
     private GameWindow() {
