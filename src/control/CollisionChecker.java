@@ -1,8 +1,12 @@
 package control;
 
-import model.GameEntity;
-import model.TileManager;
+import model.*;
+import model.Point;
 import view.GameWindow;
+
+import java.awt.*;
+import java.util.List;
+import java.util.Map;
 
 public class CollisionChecker {
     GameWindow gw;
@@ -11,7 +15,7 @@ public class CollisionChecker {
         this.gw = GameWindow.getInstance();
     }
 
-    public void checkTile(GameEntity entity) {
+    public void checkTile(PacMan entity) {
         int entityLeftWorldX = entity.getPositionX() + entity.solidArea.x;
         int entityRightWorldX = entity.getPositionX() + entity.solidArea.x + entity.solidArea.width;
         int entityTopWorldY = entity.getPositionY() + entity.solidArea.y;
@@ -42,7 +46,7 @@ public class CollisionChecker {
                 }
                 break;
             case "left":
-                entityLeftCol = (entityLeftWorldX + entity.speed-5) / gw.getTileSize();
+                entityLeftCol = (entityLeftWorldX + entity.speed - 5) / gw.getTileSize();
                 tileNum1 = TileManager.mapTileNum[entityLeftCol][entityTopRow];
                 tileNum2 = TileManager.mapTileNum[entityLeftCol][entityBottomRow];
                 if (TileManager.tile[tileNum1].collision || TileManager.tile[tileNum2].collision) {
@@ -60,68 +64,52 @@ public class CollisionChecker {
         }
     }
 
-//    public int CheckObject(GameEntity entity, boolean player) {
-//        int index = 999;
-//        for (int i = 0; i < gp.obj.length; i++) {
-//            if (gp.obj[i] != null) {
-//                entity.solidArea.x = entity.positionX + entity.solidArea.x;
-//                entity.solidArea.y = entity.positionY + entity.solidArea.y;
-//
-//                gp.obj[i].solidArea.x = gp.obj[i].worldX + gp.obj[i].solidArea.x;
-//                gp.obj[i].solidArea.y = gp.obj[i].worldY + gp.obj[i].solidArea.y;
-//
-//                switch (entity.direction) {
-//                    case "up":
-//                        entity.solidArea.y -= entity.speed;
-//                        if (entity.solidArea.intersects(gp.obj[i].solidArea) ) {
-//                            if (gp.obj[i].collision) {
-//                                entity.collisionOn=true;
-//                            }
-//                            if (player) {
-//                                index=i;
-//                            }
-//                        }
-//                        break;
-//                    case "down":
-//                        entity.solidArea.y += entity.speed;
-//                        if (entity.solidArea.intersects(gp.obj[i].solidArea) ) {
-//                            if (gp.obj[i].collision) {
-//                                entity.collisionOn=true;
-//                            }
-//                            if (player) {
-//                                index=i;
-//                            }
-//                        }
-//                        break;
-//                    case "left":
-//                        entity.solidArea.x -= entity.speed;
-//                        if (entity.solidArea.intersects(gp.obj[i].solidArea) ) {
-//                            if (gp.obj[i].collision) {
-//                                entity.collisionOn=true;
-//                            }
-//                            if (player) {
-//                                index=i;
-//                            }
-//                        }
-//                        break;
-//                    case "right":
-//                        entity.solidArea.x += entity.speed ;
-//                        if (entity.solidArea.intersects(gp.obj[i].solidArea) ) {
-//                            if (gp.obj[i].collision) {
-//                                entity.collisionOn=true;
-//                            }
-//                            if (player) {
-//                                index=i;
-//                            }
-//                        }
-//                        break;
-//                }
-//                entity.solidArea.x =entity.solidAreaDefaultX;
-//                entity.solidArea.y=entity.solidAreaDefaultY;
-//                gp.obj[i].solidArea.x=gp.obj[i].solidAreaDefaultX;
-//                gp.obj[i].solidArea.y=gp.obj[i].solidAreaDefaultY;
-//            }
-//        }
-//        return index;
-//    }
+
+    public int checkObject(PacMan pacMan) {
+
+
+        Map<Integer, Map<Integer, Point>> pellets = GameController.mapPellet;
+        Rectangle solidSpeed = pacMan.solidArea;
+        int entityLeftWorldX = pacMan.getPositionX() + pacMan.solidArea.x;
+        int entityRightWorldX = pacMan.getPositionX() + pacMan.solidArea.x + pacMan.solidArea.width;
+        int entityTopWorldY = pacMan.getPositionY() + pacMan.solidArea.y;
+        int entityBottomtWorldY = pacMan.getPositionY() + pacMan.solidArea.y + pacMan.solidArea.height;
+
+        int entityLeftCol = entityLeftWorldX / gw.getTileSize();
+        int entityRightCol = entityRightWorldX / gw.getTileSize();
+        int entityTopRow = entityTopWorldY / gw.getTileSize();
+        int entityBottomRow = entityBottomtWorldY / gw.getTileSize();
+        int point = 0;
+
+        switch (pacMan.direction) {
+            case "up":
+                entityTopRow = (entityTopWorldY - pacMan.speed) / gw.getTileSize();
+                return Math.max(checkPelletCollision(entityLeftCol, entityTopRow, solidSpeed, pacMan, pellets), checkPelletCollision(entityRightCol, entityTopRow, solidSpeed, pacMan, pellets));
+
+            case "down":
+                entityBottomRow = (entityBottomtWorldY + pacMan.speed) / gw.getTileSize();
+                return Math.max(checkPelletCollision(entityLeftCol, entityBottomRow, solidSpeed, pacMan, pellets), checkPelletCollision(entityRightCol, entityBottomRow, solidSpeed, pacMan, pellets));
+
+            case "left":
+                entityLeftCol = (entityLeftWorldX + pacMan.speed - 5) / gw.getTileSize();
+                return Math.max(checkPelletCollision(entityLeftCol, entityTopRow, solidSpeed, pacMan, pellets), checkPelletCollision(entityLeftCol, entityBottomRow, solidSpeed, pacMan, pellets));
+
+            case "right":
+                entityRightCol = (entityRightWorldX + pacMan.speed) / gw.getTileSize();
+                return Math.max(checkPelletCollision(entityRightCol, entityTopRow, solidSpeed, pacMan, pellets), checkPelletCollision(entityRightCol, entityBottomRow, solidSpeed, pacMan, pellets));
+
+        }
+        return point;
+    }
+
+    private int checkPelletCollision(int col, int row, Rectangle solidSpeed, PacMan pacMan, Map<Integer, Map<Integer, Point>> pellets) {
+        int point = 0;
+        if (pellets.containsKey(col) && pellets.get(col).containsKey(row) && solidSpeed.intersects(pellets.get(col).get(row).solidArea)) {
+            pacMan.collisionOn = true;
+            point = pellets.get(col).get(row).getPoints();
+            pellets.get(col).remove(row);
+            return point;
+        }
+        return point;
+    }
 }

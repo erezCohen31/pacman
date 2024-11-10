@@ -7,29 +7,35 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Pellet extends Point {
+public class BigPellet extends Point {
 
     public int solidAreaDefaultX=0;
     public int solidAreaDefaultY=0;
 
 
 
-    public Pellet(int x,int y,int points) {
+    public BigPellet(int x,int y,int points) {
         this.points = points;
         setPositionX(x);
         setPositionY(y);
-        loadPelletImage();
+        loadBigPelletImage();
         collisionOn=true;
 
+
+    }
+    public void setSolidArea(){
+        solidArea.x=0;
+        solidArea.y=0;
+        solidArea.width= GameWindow.TILE_SIZE;
+        solidArea.height= GameWindow.TILE_SIZE;
 
     }
 
 
 
-
-    private void loadPelletImage() {
+    private void loadBigPelletImage() {
         try {
-            image = ImageIO.read(getClass().getResourceAsStream("/pellets/pellet.png"));
+            image = ImageIO.read(getClass().getResourceAsStream("/pellets/bigpellet.png"));
 
         } catch (IOException e) {
             e.printStackTrace();

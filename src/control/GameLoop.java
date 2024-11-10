@@ -17,17 +17,18 @@ public class GameLoop implements Runnable {
         if (gameThread == null) {
             gameThread = new Thread(this);
             gameThread.start();
+
         }
     }
 
     @Override
     public void run() {
+        gameController.setPellets();
         final double drawInterval = 1e9 / gameController.getFPS();
         double delta = 0;
         long lastTime = System.nanoTime();
         long timer = 0;
         int drawCount = 0;
-
         while (gameThread != null) {
             long currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
@@ -35,6 +36,7 @@ public class GameLoop implements Runnable {
             lastTime = currentTime;
 
             if (delta >= 1) {
+
                 gameController.updateGame();
                 window.repaint();
                 delta--;
@@ -43,6 +45,7 @@ public class GameLoop implements Runnable {
 
             if (timer >= 1e9) {
                 System.out.println("FPS:" + drawCount);
+
                 drawCount = 0;
                 timer = 0;
             }

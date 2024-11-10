@@ -1,19 +1,25 @@
 package model;
 
 import control.CollisionChecker;
+import control.GameController;
 import control.InputHandler;
 import view.GameWindow;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class PacMan extends GameEntity {
     private int lives = 3;
-    private int score = 0;
+    public static int score = 0;
+    public static int highScore = 0;
     private final GameWindow gameWindow;
     private final InputHandler inputHandler;
     public CollisionChecker cChecker = new CollisionChecker();
+    public BufferedImage up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
+    public boolean collisionWall = false;
+
 
     private static PacMan instancePacMan;
 
@@ -57,6 +63,8 @@ public class PacMan extends GameEntity {
             }
             collisionOn = false;
             cChecker.checkTile(this);
+            score += cChecker.checkObject(this);
+            System.out.println(score);
             if (!collisionOn) {
                 switch (direction) {
                     case "up":
@@ -73,7 +81,7 @@ public class PacMan extends GameEntity {
                         }
                         break;
                     case "right":
-                        if (getPositionX() ==582) {
+                        if (getPositionX() == 582) {
                             setPositionX(0);
                         } else {
                             setPositionX(getPositionX() + speed);
@@ -124,4 +132,6 @@ public class PacMan extends GameEntity {
     public int getLives() {
         return lives;
     }
+
 }
+

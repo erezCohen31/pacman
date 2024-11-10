@@ -17,7 +17,7 @@ public class TileManager {
 
     public TileManager(GameWindow gw) {
         this.gameWindow = gw;
-        tile = new Tile[16];
+        tile = new Tile[17];
         mapTileNum = new int[gw.getCOL()][gw.getROW()];
         getTileImage();
 
@@ -32,9 +32,10 @@ public class TileManager {
 
     public void getTileImage() {
         try {
-            tile[0] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/blue.png")), false);
+            tile[0] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/black.png")), false);
 
             tile[1] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/black.png")), false);
+            tile[16] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/black.png")), false);
 
             tile[2] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/horizontal.png")), true);
 

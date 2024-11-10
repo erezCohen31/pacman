@@ -1,12 +1,17 @@
 package view;
 
+import control.GameController;
 import control.InputHandler;
 import model.GameEntity;
 import model.PacMan;
+import model.Pellet;
+import model.Point;
 import model.TileManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
+import java.util.Map;
 
 public class Renderer {
 
@@ -59,7 +64,7 @@ public class Renderer {
                 }
                 break;
         }
-        g2.drawImage(image, entity.getPositionX(), entity.getPositionY(), (int) (gw.getTileSize()/1.3), (int) (gw.getTileSize()/1.3), null);
+        g2.drawImage(image, entity.getPositionX(), entity.getPositionY(), (int) (gw.getTileSize()), (int) (gw.getTileSize()/1.3), null);
     }
 
     public void drawMap(Graphics2D g2, GameWindow gw) {
@@ -74,6 +79,19 @@ public class Renderer {
             if (worldCol == gw.getCOL()) {
                 worldCol = 0;
                 worldRow++;
+            }
+        }
+    }
+    public void drawPellet(Graphics2D g2){
+        for (Map.Entry<Integer, Map<Integer, Point>> entry : GameController.mapPellet.entrySet()) {
+            Map<Integer, Point> yPellet = entry.getValue();
+            if (yPellet != null) {
+                for (Map.Entry<Integer, Point> subEntry : yPellet.entrySet()) {
+                    Point pellet = subEntry.getValue();
+                    if (pellet != null && pellet.image != null) {
+                        g2.drawImage(pellet.image, pellet.getPositionX() * GameWindow.TILE_SIZE, pellet.getPositionY() * GameWindow.TILE_SIZE, GameWindow.TILE_SIZE, GameWindow.TILE_SIZE, null);
+                    }
+                }
             }
         }
     }
