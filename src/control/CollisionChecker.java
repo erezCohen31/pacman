@@ -104,10 +104,10 @@ public class CollisionChecker {
 
     private int checkPelletCollision(int col, int row, Rectangle solidSpeed, PacMan pacMan, Map<Integer, Map<Integer, Point>> pellets) {
         int point = 0;
-        if (pellets.containsKey(col) && pellets.get(col).containsKey(row) && solidSpeed.intersects(pellets.get(col).get(row).solidArea)) {
+        if (pellets.containsKey(col) && pellets.get(col).containsKey(row) &&  pellets.get(col).get(row) !=null&&solidSpeed.intersects(pellets.get(col).get(row).solidArea)) {
             pacMan.collisionOn = true;
             point = pellets.get(col).get(row).getPoints();
-            pellets.get(col).remove(row);
+            pellets.get(col).put(row,null);
             return point;
         }
         return point;

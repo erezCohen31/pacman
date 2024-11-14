@@ -9,8 +9,7 @@ import java.io.IOException;
 
 public class Pellet extends Point {
 
-    public int solidAreaDefaultX=0;
-    public int solidAreaDefaultY=0;
+
 
 
 

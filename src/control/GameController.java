@@ -3,15 +3,12 @@ package control;
 import model.*;
 import view.GameWindow;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GameController {
     private final PacMan pacMan = PacMan.getInstance(GameWindow.getInstance(), InputHandler.getInstance());
     private final Ghost[] ghosts = {new Ghost(), new Ghost(), new Ghost(), new Ghost()};
-    //    public final static List<Pellet> pellets =new ArrayList<>();
+    public FruitManger fruitManger = new FruitManger();
     public final static Map<Integer, Map<Integer, Point>> mapPellet = new HashMap<>();
 
 
@@ -24,6 +21,7 @@ public class GameController {
 
     public void updateGame() {
         pacMan.move();
+
     }
 
     public boolean isGameOver() {
@@ -33,6 +31,7 @@ public class GameController {
     public int getFPS() {
         return FPS;
     }
+
 
     public void setPellets() {
 

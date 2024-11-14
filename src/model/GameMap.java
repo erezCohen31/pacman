@@ -6,7 +6,7 @@ import java.util.List;
 public class GameMap {
     private final List<Pellet> pelletList = new ArrayList<>();
     private final List<Pair> wallList = new ArrayList<>();
-    private final List<Fruit> fruitList = new ArrayList<>();
+
 
     public int getRemainingPellets() {
         return pelletList.size();

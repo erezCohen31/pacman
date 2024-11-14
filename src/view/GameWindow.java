@@ -2,6 +2,7 @@ package view;
 
 import control.GameController;
 import control.InputHandler;
+import model.FruitManger;
 import model.PacMan;
 import model.TileManager;
 
@@ -15,6 +16,7 @@ public class GameWindow extends JPanel {
     private final Renderer renderer = new Renderer();
     private static GameWindow instance;
     public TileManager tileManager= new TileManager(this);
+
 
 
 

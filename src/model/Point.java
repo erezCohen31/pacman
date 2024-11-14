@@ -2,16 +2,35 @@ package model;
 
 import view.GameWindow;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class Point extends GameEntity {
     int points;
-
-
+    boolean isEaten;
+   public BufferedImage image;
     String name;
-    int col;
-    int row;
+
+    public Point() {
+    }
+
+    ;
+
+    public Point(int positionX, int positionY, String name, int points) {
+        this.setPositionX(positionX);
+        this.setPositionY(positionY);
+        this.name = name;
+        try {
+            image = ImageIO.read(getClass().getResourceAsStream("/fruits/" + name + ".png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        this.points = points;
+        collisionOn = true;
+
+    }
 
 
     @Override
