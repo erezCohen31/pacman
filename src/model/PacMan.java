@@ -16,14 +16,14 @@ public class PacMan extends GameEntity {
     public static int highScore = 0;
     private final GameWindow gameWindow;
     private final InputHandler inputHandler;
-    public CollisionChecker cChecker = new CollisionChecker();
+    public CollisionChecker cChecker = new CollisionChecker(GameWindow.getInstance());
     public BufferedImage up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
     public boolean collisionWall = false;
 
 
     private static PacMan instancePacMan;
 
-    private PacMan(GameWindow gw, InputHandler keyHandler) {
+    public PacMan(GameWindow gw, InputHandler keyHandler) {
         this.gameWindow = gw;
         this.inputHandler = keyHandler;
         solidArea = new Rectangle(4, 4, 10, 10);
@@ -48,7 +48,7 @@ public class PacMan extends GameEntity {
     public void move() {
         if (inputHandler.upPressed || inputHandler.downPressed || inputHandler.leftPressed || inputHandler.rightPressed) {
 
-            if (inputHandler.upPressed) {
+            if (inputHandler.upPressed ) {
                 direction = "up";
 
             } else if (inputHandler.downPressed) {
@@ -64,7 +64,8 @@ public class PacMan extends GameEntity {
             collisionOn = false;
             cChecker.checkTile(this);
             score += cChecker.checkObject(this);
-            System.out.println(score);
+
+
             if (!collisionOn) {
                 switch (direction) {
                     case "up":
@@ -102,6 +103,7 @@ public class PacMan extends GameEntity {
                 }
             }
         }
+
     }
 
     private void loadPlayerImage() {
@@ -132,6 +134,7 @@ public class PacMan extends GameEntity {
     public int getLives() {
         return lives;
     }
+
 
 }
 

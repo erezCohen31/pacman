@@ -1,19 +1,19 @@
-// package control;
+
 package control;
 
-import model.FruitManger;
+import model.FruitManager;
 import view.GameWindow;
 
 public class GameLoop implements Runnable {
     private final GameController gameController;
     private final GameWindow window;
     private Thread gameThread;
-    private FruitManger fruitManger;
+    private FruitManager fruitManager;
 
     public GameLoop(GameWindow window) {
         this.gameController = new GameController();
         this.window = window;
-        this.fruitManger = new FruitManger();
+        this.fruitManager = new FruitManager();
     }
 
     public void startGameThread() {
@@ -26,8 +26,7 @@ public class GameLoop implements Runnable {
 
     @Override
     public void run() {
-        gameController.setPellets();
-        fruitManger.startFruit();
+        gameController.startGame();
 
         final double drawInterval = 1e9 / gameController.getFPS();
         double delta = 0;

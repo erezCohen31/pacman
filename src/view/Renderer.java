@@ -2,18 +2,15 @@ package view;
 
 import control.GameController;
 import control.InputHandler;
-import model.GameEntity;
-import model.PacMan;
-import model.Pellet;
+import model.*;
 import model.Point;
-import model.TileManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 
-public class Renderer {
+public class  Renderer {
 
     public void drawEntity(GameEntity entity, GameWindow gw, Graphics2D g2) {
         BufferedImage image = null;
@@ -83,7 +80,7 @@ public class Renderer {
         }
     }
     public void drawPellet(Graphics2D g2){
-        for (Map.Entry<Integer, Map<Integer, Point>> entry : GameController.mapPellet.entrySet()) {
+        for (Map.Entry<Integer, Map<Integer, Point>> entry : GameMap.mapPellet.entrySet()) {
             Map<Integer, Point> yPellet = entry.getValue();
             if (yPellet != null) {
                 for (Map.Entry<Integer, Point> subEntry : yPellet.entrySet()) {
@@ -94,5 +91,20 @@ public class Renderer {
                 }
             }
         }
+    }
+    public void drawGhost(Graphics2D g2d, Ghost ghost) {
+        // Récupérer les coordonnées du fantôme
+        int x = ghost.getPositionX();
+        int y = ghost.getPositionY();
+
+        // Si le fantôme est dans un état spécial (ex : mode "peur"), ajuster le rendu
+        if (ghost.isFear) {
+            // Par exemple, changer la couleur pour un effet spécial de peur
+            g2d.setColor(Color.BLUE);  // Vous pouvez ajuster la couleur ou appliquer un effet
+        }
+
+
+        // Dessiner l'image du fantôme à la position donnée
+        g2d.drawImage(ghost.image, x, y, GameWindow.TILE_SIZE, GameWindow.TILE_SIZE, null);
     }
 }

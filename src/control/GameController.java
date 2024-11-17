@@ -7,9 +7,9 @@ import java.util.*;
 
 public class GameController {
     private final PacMan pacMan = PacMan.getInstance(GameWindow.getInstance(), InputHandler.getInstance());
-    private final Ghost[] ghosts = {new Ghost(), new Ghost(), new Ghost(), new Ghost()};
-    public FruitManger fruitManger = new FruitManger();
-    public final static Map<Integer, Map<Integer, Point>> mapPellet = new HashMap<>();
+    public FruitManager fruitManager = new FruitManager();
+    public GameMap gameMap = new GameMap();
+    GhostManager ghostManager=GhostManager.getInstance();
 
 
     private final GameMap map = new GameMap();
@@ -17,10 +17,16 @@ public class GameController {
 
     public void startGame() {
         System.out.println("Game started");
+        gameMap.setPellets();
+        fruitManager.startFruit();
     }
 
     public void updateGame() {
+
         pacMan.move();
+
+        fruitManager.appearFruit();
+        ghostManager.blinkyMove();
 
     }
 
@@ -33,35 +39,4 @@ public class GameController {
     }
 
 
-    public void setPellets() {
-
-        for (int i = 0; i < 25; i++) {
-            Map<Integer, Point> yPellet = new HashMap<>();
-            for (int j = 5; j < 28; j++) {
-                if (TileManager.mapTileNum[i][j] == 1) {
-//
-
-                    yPellet.put(j, new Pellet(i, j, 10));
-
-                    yPellet.get(j).setSolidArea();
-
-//
-
-                } else if (TileManager.mapTileNum[i][j] == 16) {
-//
-
-                    yPellet.put(j, new BigPellet(i, j, 50));
-
-                    yPellet.get(j).setSolidArea();
-
-//
-
-
-                }
-
-            }
-            mapPellet.put(i, yPellet);
-        }
-
-    }
 }

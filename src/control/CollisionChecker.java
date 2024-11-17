@@ -11,11 +11,11 @@ import java.util.Map;
 public class CollisionChecker {
     GameWindow gw;
 
-    public CollisionChecker() {
-        this.gw = GameWindow.getInstance();
+    public CollisionChecker(GameWindow gameWindow) {
+        this.gw = gameWindow;
     }
 
-    public void checkTile(PacMan entity) {
+    public void checkTile(GameEntity entity) {
         int entityLeftWorldX = entity.getPositionX() + entity.solidArea.x;
         int entityRightWorldX = entity.getPositionX() + entity.solidArea.x + entity.solidArea.width;
         int entityTopWorldY = entity.getPositionY() + entity.solidArea.y;
@@ -68,7 +68,7 @@ public class CollisionChecker {
     public int checkObject(PacMan pacMan) {
 
 
-        Map<Integer, Map<Integer, Point>> pellets = GameController.mapPellet;
+        Map<Integer, Map<Integer, Point>> pellets = GameMap.mapPellet;
         Rectangle solidSpeed = pacMan.solidArea;
         int entityLeftWorldX = pacMan.getPositionX() + pacMan.solidArea.x;
         int entityRightWorldX = pacMan.getPositionX() + pacMan.solidArea.x + pacMan.solidArea.width;
@@ -104,12 +104,14 @@ public class CollisionChecker {
 
     private int checkPelletCollision(int col, int row, Rectangle solidSpeed, PacMan pacMan, Map<Integer, Map<Integer, Point>> pellets) {
         int point = 0;
-        if (pellets.containsKey(col) && pellets.get(col).containsKey(row) &&  pellets.get(col).get(row) !=null&&solidSpeed.intersects(pellets.get(col).get(row).solidArea)) {
+        if (pellets.containsKey(col) && pellets.get(col).containsKey(row) && pellets.get(col).get(row) != null && solidSpeed.intersects(pellets.get(col).get(row).solidArea)) {
             pacMan.collisionOn = true;
             point = pellets.get(col).get(row).getPoints();
-            pellets.get(col).put(row,null);
+            pellets.get(col).put(row, null);
             return point;
         }
         return point;
     }
+
+
 }
