@@ -2,13 +2,14 @@ package view;
 
 import control.GameController;
 import control.InputHandler;
-import model.FruitManager;
-import model.GhostManager;
-import model.PacMan;
-import model.TileManager;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class GameWindow extends JPanel {
     public static final int TILE_SIZE = 24;
@@ -16,7 +17,8 @@ public class GameWindow extends JPanel {
     public static final int ROW = 31;
     private final Renderer renderer = new Renderer();
     private static GameWindow instance;
-    public TileManager tileManager = new TileManager(this);
+    public TileManager tileManager;
+
 
 
 
@@ -26,6 +28,8 @@ public class GameWindow extends JPanel {
         this.setDoubleBuffered(true);
         this.addKeyListener(InputHandler.getInstance());
         this.setFocusable(true);
+        tileManager =new TileManager(this);
+
 
     }
 
@@ -53,11 +57,15 @@ public class GameWindow extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         renderer.drawMap(g2, this);
-        renderer.drawEntity(PacMan.getInstance(this, InputHandler.getInstance()), this, g2);
-renderer.drawGhost(g2,GhostManager.getInstance().ghosts.get("pinky"));
-        renderer.drawGhost(g2,GhostManager.getInstance().ghosts.get("blinky"));
-        renderer.drawGhost(g2,GhostManager.getInstance().ghosts.get("clyde"));
-        renderer.drawGhost(g2,GhostManager.getInstance().ghosts.get("inky"));
+    
+        PacMan pacManInstance = PacMan.getInstance(GameWindow.getInstance(), InputHandler.getInstance());
+        renderer.drawEntity(pacManInstance, this, g2);
+        for (int i = 0; i < GameMap.ghosts.size(); i++) {
+            renderer.drawGhost(GameMap.ghosts.get(i), this, g2);
+        }
+    
+
+    
         renderer.drawPellet(g2);
         drawScore(g2);
         g2.dispose();

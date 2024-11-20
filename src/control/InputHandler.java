@@ -28,36 +28,34 @@ public class InputHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-        if (code == KeyEvent.VK_Z ) {
-            upPressed = true;
-            downPressed = false;
-            leftPressed = false;
-            rightPressed = false;
-        }
-        if (code == KeyEvent.VK_S) {
-            downPressed = true;
-            leftPressed = false;
-            rightPressed = false;
-            upPressed = false;
-        }
-
-
-        if (code == KeyEvent.VK_Q) {
-            leftPressed = true;
-            upPressed = false;
-            downPressed = false;
-            rightPressed = false;
-        }
-        if (code == KeyEvent.VK_D) {
-            rightPressed = true;
-            leftPressed = false;
-            upPressed = false;
-            downPressed = false;
+        switch (code) {
+            case KeyEvent.VK_Z:
+                upPressed = true;
+                downPressed = false;
+                rightPressed = false;
+                leftPressed = false;
+                break;
+            case KeyEvent.VK_S:
+                downPressed = true;
+                upPressed = false;
+                rightPressed = false;
+                leftPressed = false;
+                break;
+            case KeyEvent.VK_Q:
+                leftPressed = true;
+                upPressed = false;
+                downPressed = false;
+                rightPressed = false;
+                break;
+            case KeyEvent.VK_D:
+                rightPressed = true;
+                upPressed = false;
+                downPressed = false;
+                leftPressed = false;
+                break;
         }
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
+    public void keyReleased(KeyEvent e) {    }
 }

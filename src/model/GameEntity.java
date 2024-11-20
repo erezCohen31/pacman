@@ -1,49 +1,62 @@
 package model;
 
+import control.CollisionChecker;
+import view.GameWindow;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class GameEntity {
-    private int positionX;
-    private int positionY;
-    protected int width;
-    protected int height;
+
     public int speed;
-    public String direction;
-    public Rectangle solidArea=new Rectangle();
-    public int solidAreaDefaultX, solidAreaDefaultY;
+    Point pos = new Point();
+    public enum Direction {
+        UP, DOWN, LEFT, RIGHT
+    }
+
+    public Direction direction;
+    public Rectangle solidArea = new Rectangle();
     public boolean collisionOn = false;
-    public BufferedImage image;
+    public Map<Direction, BufferedImage[]> directionImages = new HashMap<>();
 
     public int spriteCounter = 0;
     public int spriteNum = 1;
+    public CollisionChecker cChecker;
+
+    protected void initCollisionChecker() {
+        if (cChecker == null) {
+            cChecker = new CollisionChecker(GameWindow.getInstance());
+        }
+    }
 
     public int getPositionX() {
-        return positionX;
+        return pos.x;
     }
 
     public void setPositionX(int positionX) {
-        this.positionX = positionX;
+        pos.x = positionX;
+
+    }
+
+    public Point getPos() {
+        return pos;
     }
 
     public int getPositionY() {
-        return positionY;
+        return pos.y;
     }
 
     public void setPositionY(int positionY) {
-        this.positionY = positionY;
+        this.pos.y = positionY;
     }
 
-    public abstract int eaten();
 
-    public void move() {
-        // Implémentation à définir dans les sous-classes si nécessaire
+
+    public void setPosition(int positionX, int positionY) {
+        this.pos.x = positionX;
+        this.pos.y = positionY;
     }
 
-    public boolean intersects(GameEntity other) {
-        return this.positionX < other.positionX + other.width &&
-                this.positionX + this.width > other.positionX &&
-                this.positionY < other.positionY + other.height &&
-                this.positionY + this.height > other.positionY;
-    }
 }

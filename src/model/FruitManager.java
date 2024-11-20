@@ -1,7 +1,5 @@
 package model;
 
-import control.GameController;
-
 import java.util.*;
 
 public class FruitManager {
@@ -12,7 +10,7 @@ public class FruitManager {
     public final static List<Pair> fruitPosition = new ArrayList<>();
     private Timer despawnTimer;
     Pair currentFruitPosition;
-    Point currentFruit=new Point();
+    Points currentFruit=new Points();
 
 
     public void setFruitPosition() {
@@ -49,7 +47,7 @@ public class FruitManager {
     }
 
 
-    public Point spawnFruit() {
+    public Points spawnFruit() {
         setFruitPosition();
         // Sélectionner aléatoirement un emplacement dans les points possibles de la carte
 
@@ -59,9 +57,9 @@ public class FruitManager {
              currentFruitPosition = fruitPosition.get(randomPosition);
             // Créer et positionner un fruit
             String name = getRandomFruit();
-            Point fruit = new Point(currentFruitPosition.getX(), currentFruitPosition.getY(), name, fruitList.get(name));
+            Points fruit = new Points(currentFruitPosition.getX(), currentFruitPosition.getY(), name, fruitList.get(name));
             fruit.setSolidArea();
-            Map<Integer, Point> posY = new HashMap<>();
+            Map<Integer, Points> posY = new HashMap<>();
             posY.put(currentFruitPosition.getY(), fruit);
             GameMap.mapPellet.get(currentFruitPosition.getX()).put(currentFruitPosition.getY(), fruit);
             startDespawnTimer(() -> {

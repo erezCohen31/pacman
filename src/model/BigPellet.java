@@ -3,11 +3,9 @@ package model;
 import view.GameWindow;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class BigPellet extends Point {
+public class BigPellet extends Points {
 
     public int solidAreaDefaultX=0;
     public int solidAreaDefaultY=0;

@@ -8,19 +8,16 @@ public class GameLoop implements Runnable {
     private final GameController gameController;
     private final GameWindow window;
     private Thread gameThread;
-    private FruitManager fruitManager;
 
     public GameLoop(GameWindow window) {
         this.gameController = new GameController();
         this.window = window;
-        this.fruitManager = new FruitManager();
     }
 
     public void startGameThread() {
         if (gameThread == null) {
             gameThread = new Thread(this);
             gameThread.start();
-
         }
     }
 

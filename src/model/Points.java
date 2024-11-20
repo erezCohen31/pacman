@@ -3,22 +3,21 @@ package model;
 import view.GameWindow;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Point extends GameEntity {
+public class Points extends GameEntity {
     int points;
     boolean isEaten;
    public BufferedImage image;
     String name;
 
-    public Point() {
+    public Points() {
     }
 
     ;
 
-    public Point(int positionX, int positionY, String name, int points) {
+    public Points(int positionX, int positionY, String name, int points) {
         this.setPositionX(positionX);
         this.setPositionY(positionY);
         this.name = name;
@@ -33,7 +32,7 @@ public class Point extends GameEntity {
     }
 
 
-    @Override
+
     public int eaten() {
         return 0;
     }
