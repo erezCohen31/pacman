@@ -95,9 +95,11 @@ public class CollisionChecker {
         if (pellets.containsKey(col) && pellets.get(col).containsKey(row) && pellets.get(col).get(row) != null && solidSpeed.intersects(pellets.get(col).get(row).solidArea)) {
             pacMan.collisionOn = true;
             point = pellets.get(col).get(row).getPoints();
-
+            if (point>50 ) {
+                GameMap.eatenFruits.add(pellets.get(col).get(row));
+            }
             // Vérifie si c'est un gros pellet (50 points) ou un fruit
-            if (point >= 50 || pellets.get(col).get(row) instanceof BigPellet) {
+            if (point >= 50 ) {
                 // Active le mode escape pour tous les fantômes
                 for (Ghost ghost : GameMap.ghosts) {
                     ghost.startEscapeMode();

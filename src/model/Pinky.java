@@ -5,8 +5,8 @@ import view.GameWindow;
 import java.awt.*;
 
 public class Pinky extends Ghost {
-    public Pinky(String name, Point basePos) {
-        super(name, basePos);
+    public Pinky(String name, int posX,int posY) {
+        super(name, posX,posY);
     }
 
     @Override

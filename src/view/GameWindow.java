@@ -63,6 +63,8 @@ public class GameWindow extends JPanel {
         for (int i = 0; i < GameMap.ghosts.size(); i++) {
             renderer.drawGhost(GameMap.ghosts.get(i), this, g2);
         }
+        renderer.drawHearth(g2,this);
+        renderer.drawEatenFruit(g2,this);
     
 
     

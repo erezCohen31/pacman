@@ -17,14 +17,14 @@ public abstract class Ghost extends GameEntity {
 
     public static final int TILE_SIZE = 24;
     public static final int DEFAULT_SPEED = 1;
-    private static final int CHASE_MODE_DELAY = 15000; // 15 secondes en millisecondes
-    private static final int ESCAPE_MODE_DURATION = 10000; // 10 secondes en millisecondes
+    private static final int SCATTER_MODE_DURATION = 7000; // 7 secondes en millisecondes
+    private static final int CHASE_MODE_DURATION = 20000;  // 20 secondes en millisecondes
+    private static final int ESCAPE_MODE_DURATION = 20000; // 20 secondes en millisecondes
 
     String name;
-    Point basePos;
+    final Point BASE_POS;
     Point target;
     PacMan pacMan;
-    public BufferedImage image;
     Point shortPath;
     Point prevPos;
     Map<String, Point> mapDirection = new HashMap<>();
@@ -32,6 +32,11 @@ public abstract class Ghost extends GameEntity {
     private Timer behaviorTimer;
     private Timer escapeTimer;
     private GhostMode currentMode;
+    public BufferedImage afraidImage;
+    public BufferedImage eyeImage;
+    boolean collisionPacMan;
+    public boolean escapeMode;
+    public boolean isEaten = false;
 
     private enum GhostMode {
         SCATTER,
@@ -41,12 +46,11 @@ public abstract class Ghost extends GameEntity {
 
     Point goodDirection;
 
-
-    public Ghost(String name, Point basePos) {
+    public Ghost(String name, int posX,int posY) {
         cChecker = new CollisionChecker(GameWindow.getInstance());
         this.name = name;
-        this.basePos = basePos;
-        this.pos = basePos;
+        this.BASE_POS = new Point(posX, posY);
+        this.pos = new Point(posX, posY);
         loadPlayerImage();
         target = new Point();
         this.pacMan = PacMan.getInstance(GameWindow.getInstance(), InputHandler.getInstance());
@@ -58,7 +62,7 @@ public abstract class Ghost extends GameEntity {
         direction = Direction.DOWN;
         speed = DEFAULT_SPEED;
 
-        // Démarre en mode scatter et programme le passage en mode chase
+        // Démarre en mode scatter et programme l'alternance entre scatter et chase
         startBehaviorTimer();
     }
 
@@ -67,15 +71,21 @@ public abstract class Ghost extends GameEntity {
         scatterMode();
 
         behaviorTimer = new Timer();
-        behaviorTimer.schedule(new TimerTask() {
+        // Programme l'alternance entre scatter et chase
+        behaviorTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (currentMode != GhostMode.ESCAPE) {
-                    currentMode = GhostMode.CHASE;
-                    chaseMode();
+                if (currentMode != GhostMode.ESCAPE && !isEaten) {
+                    if (currentMode == GhostMode.SCATTER) {
+                        currentMode = GhostMode.CHASE;
+                        chaseMode();
+                    } else {
+                        currentMode = GhostMode.SCATTER;
+                        scatterMode();
+                    }
                 }
             }
-        }, CHASE_MODE_DELAY);
+        }, SCATTER_MODE_DURATION, SCATTER_MODE_DURATION + CHASE_MODE_DURATION);
     }
 
     public void resetBehavior() {
@@ -93,23 +103,37 @@ public abstract class Ghost extends GameEntity {
 
         // Active le mode escape
         currentMode = GhostMode.ESCAPE;
-        shortPath=null;
+        escapeMode = true;
         escapeMode();
-        speed = DEFAULT_SPEED ; // Ralentit le fantôme
 
         // Crée un nouveau timer pour revenir au mode précédent
         escapeTimer = new Timer();
         escapeTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                speed = DEFAULT_SPEED;
-                if (behaviorTimer != null && behaviorTimer.purge() > 0) {
-                    currentMode = GhostMode.CHASE;
-                    chaseMode();
-                } else {
-                    currentMode = GhostMode.SCATTER;
-                    scatterMode();
+                escapeMode = false;
+                currentMode = GhostMode.CHASE;
+                chaseMode();
+                
+                // Démarre un nouveau timer pour alterner entre chase et scatter
+                if (behaviorTimer != null) {
+                    behaviorTimer.cancel();
                 }
+                behaviorTimer = new Timer();
+                behaviorTimer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (currentMode != GhostMode.ESCAPE && !isEaten) {
+                            if (currentMode == GhostMode.CHASE) {
+                                currentMode = GhostMode.SCATTER;
+                                scatterMode();
+                            } else {
+                                currentMode = GhostMode.CHASE;
+                                chaseMode();
+                            }
+                        }
+                    }
+                }, CHASE_MODE_DURATION, SCATTER_MODE_DURATION + CHASE_MODE_DURATION);
             }
         }, ESCAPE_MODE_DURATION);
     }
@@ -145,6 +169,8 @@ public abstract class Ghost extends GameEntity {
                 image = ImageIO.read(getClass().getResourceAsStream("/ghosts/" + name + "_" + dir.name().toLowerCase() + ".png"));
                 directionImage.put(dir, image);
             }
+            afraidImage = ImageIO.read(getClass().getResourceAsStream("/ghosts/afraid.png"));
+            eyeImage = ImageIO.read(getClass().getResourceAsStream("/ghosts/eyeGhost.png"));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -164,13 +190,12 @@ public abstract class Ghost extends GameEntity {
 
     private void escapeMode() {
         // Inverse la direction (rotation 180 degrés) uniquement au début du mode escape
-        if (shortPath == null) {
-            switch (direction) {
-                case UP -> direction = Direction.DOWN;
-                case DOWN -> direction = Direction.UP;
-                case LEFT -> direction = Direction.RIGHT;
-                case RIGHT -> direction = Direction.LEFT;
-            }
+
+        switch (direction) {
+            case UP -> direction = Direction.DOWN;
+            case DOWN -> direction = Direction.UP;
+            case LEFT -> direction = Direction.RIGHT;
+            case RIGHT -> direction = Direction.LEFT;
         }
 
         // Change la direction aléatoirement
@@ -184,7 +209,7 @@ public abstract class Ghost extends GameEntity {
             Point newTarget = new Point(randomX * GameWindow.TILE_SIZE, randomY * GameWindow.TILE_SIZE);
 
             // Vérifie si la position est accessible
-            if (TileManager.mapTileNum[randomX][ randomY]==1) {
+            if (TileManager.mapTileNum[randomX][randomY] == 1) {
                 shortPath = newTarget;
             }
         }
@@ -199,12 +224,21 @@ public abstract class Ghost extends GameEntity {
     }
 
     public void eatenMode() {
-        target = basePos;
+        isEaten = true;
+        speed = DEFAULT_SPEED * 8; // Move faster when eaten
+        target.setLocation(BASE_POS);
+
     }
 
     public void findShortPath() {
+        // Si le fantôme est mangé, on force la cible vers la base
+//        if (isEaten) {
+//            target.setLocation(BASE_POS);
+//        }
+
         // Ne cherche une nouvelle direction qu'aux intersections de la grille
-        if (pos.x % TILE_SIZE == 0 && pos.y % TILE_SIZE == 0) {
+
+        if (pos.x % TILE_SIZE == 0 && pos.y % TILE_SIZE == 0|| isEaten) {
             List<Point> directions = toPoint();
             if (!directions.isEmpty()) {
                 // Trouve la direction qui rapproche le plus de la cible
@@ -276,10 +310,27 @@ public abstract class Ghost extends GameEntity {
     }
 
     public void move() {
+        collisionPacMan = false;
         findShortPath();
         pos.setLocation(shortPath);
+        checkCollisions();
+
+        // Check if eaten and reached base
+        if (isEaten && pos.equals(BASE_POS)) {
+            escapeMode=false;
+            isEaten = false;
+            speed=DEFAULT_SPEED;
+
+            resetBehavior(); // Reset to same mode as other ghosts
+        } else if (collisionPacMan && escapeMode) {
+
+            eatenMode();
+        }
     }
 
+    private void checkCollisions() {
+        collisionPacMan = cChecker.checkGhostCollision(this, pacMan);
+    }
 
     public int eaten() {
         return 0;

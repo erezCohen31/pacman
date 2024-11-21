@@ -6,8 +6,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Clyde extends Ghost {
-    public Clyde(String name, Point basePos) {
-        super(name, basePos);
+    public Clyde(String name, int posX, int posY) {
+        super(name, posX, posY);
     }
 
     @Override
@@ -18,7 +18,7 @@ public class Clyde extends Ghost {
     @Override
     public void scatterMode() {
 
-            target.setLocation(24 * GameWindow.TILE_SIZE, 28 * GameWindow.TILE_SIZE);
-        }
+        target.setLocation(24 * GameWindow.TILE_SIZE, 28 * GameWindow.TILE_SIZE);
     }
+}
 

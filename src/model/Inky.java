@@ -5,8 +5,8 @@ import view.GameWindow;
 import java.awt.*;
 
 public class Inky extends Ghost {
-    public Inky(String name, Point basePos) {
-        super(name, basePos);
+    public Inky(String name,  int posX,int posY ) {
+        super(name,posX,posY );
     }
 
     @Override

@@ -40,6 +40,9 @@ public class GameLoop implements Runnable {
 
                 gameController.updateGame();
                 window.repaint();
+               if (gameController.isGameOver()) {
+                   gameThread = null;
+               }
                 delta--;
                 drawCount++;
             }

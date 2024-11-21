@@ -6,8 +6,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Blinky extends Ghost {
-    public Blinky(String name, Point basePos) {
-        super(name, basePos);
+    public Blinky(String name, int posX, int posY) {
+        super(name, posX, posY);
     }
 
     @Override
@@ -19,7 +19,7 @@ public class Blinky extends Ghost {
     @Override
     public void scatterMode() {
 
-            target.setLocation(24 * GameWindow.TILE_SIZE, 4 * GameWindow.TILE_SIZE);
+        target.setLocation(24 * GameWindow.TILE_SIZE, 4 * GameWindow.TILE_SIZE);
 
     }
 }

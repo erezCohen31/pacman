@@ -19,7 +19,7 @@ public class PacMan extends GameEntity {
     public static int highScore = 0;
     private final GameWindow gameWindow;
     private final InputHandler inputHandler;
-    public boolean collisionWall = false;
+
     private boolean gameOver = false;
     private int startX = 12;
     private int startY = 20;
@@ -44,7 +44,7 @@ public class PacMan extends GameEntity {
     }
 
     public void setDefaultValues() {
-        pos =new Point();
+        pos = new Point();
         setPositionX(gameWindow.getTileSize() * 12);
         setPositionY(gameWindow.getTileSize() * 20);
         speed = 2;
@@ -60,6 +60,14 @@ public class PacMan extends GameEntity {
                 updatePosition();
                 updateSprite();
             }
+            for (int i = 0; i < GameMap.ghosts.size(); i++) {
+                if (GameMap.ghosts.get(i).collisionPacMan && !GameMap.ghosts.get(i).escapeMode) {
+                    eaten();
+
+                    GameMap.listHearth.removeLast();
+                }
+            }
+
         }
     }
 
@@ -76,8 +84,9 @@ public class PacMan extends GameEntity {
     }
 
     private void checkCollisions() {
-        collisionOn=cChecker.checkTile(this);
+        collisionOn = cChecker.checkTile(this);
         score += cChecker.checkObject(this);
+
 
     }
 
