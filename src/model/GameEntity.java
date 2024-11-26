@@ -25,11 +25,7 @@ public abstract class GameEntity {
     public int spriteNum = 1;
     public CollisionChecker cChecker;
 
-    protected void initCollisionChecker() {
-        if (cChecker == null) {
-            cChecker = new CollisionChecker(GameWindow.getInstance());
-        }
-    }
+
 
     public int getPositionX() {
         return pos.x;

@@ -1,17 +1,12 @@
 package model;
 
 import control.CollisionChecker;
-import control.GameController;
 import control.InputHandler;
 import utils.ImageLoader;
 import view.GameWindow;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class PacMan extends GameEntity {
 
@@ -22,8 +17,8 @@ public class PacMan extends GameEntity {
     private final InputHandler inputHandler;
 
     private boolean gameOver = false;
-    private int startX = 12;
-    private int startY = 20;
+
+
 
     private static PacMan instancePacMan;
     public CollisionChecker cChecker;
@@ -70,7 +65,7 @@ public class PacMan extends GameEntity {
                 }
                 if (GameMap.ghosts.get(i).collisionPacMan && GameMap.ghosts.get(i).isPoint) {
                     score += GameMap.ghosts.get(i).point;
-                    GameMap.ghosts.get(i).isPoint=false;
+                    GameMap.ghosts.get(i).isPoint = false;
                 }
             }
 
@@ -152,29 +147,16 @@ public class PacMan extends GameEntity {
         cChecker = new CollisionChecker(gameWindow);
     }
 
-    public int eaten() {
+    public void eaten() {
         lives--;
         setDefaultValues();
-        return lives;
     }
 
     public int getLives() {
         return lives;
     }
 
-    public void die() {
-        lives--; // Réduit le nombre de vies
-        if (lives > 0) {
-            // Réinitialise la position de Pac-Man à sa position de départ
-            setDefaultValues();
-            collisionOn = false;
-        } else {
-            // Game Over
-            gameOver = true;
-        }
-    }
 
-    public boolean isGameOver() {
-        return gameOver;
-    }
+
+
 }

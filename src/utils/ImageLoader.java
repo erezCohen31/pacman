@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ImageLoader {
     private static ImageLoader instance;
@@ -30,7 +31,7 @@ public class ImageLoader {
         
         try {
             // Essaie d'abord de charger depuis les ressources
-            BufferedImage image = ImageIO.read(getClass().getResourceAsStream(path));
+            BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path)));
             if (image == null) {
                 // Si pas trouvé dans les ressources, essaie de charger depuis le système de fichiers
                 image = ImageIO.read(new File(path));

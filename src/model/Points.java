@@ -2,21 +2,19 @@ package model;
 
 import utils.ImageLoader;
 import view.GameWindow;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+
 
 public class Points extends GameEntity {
     int points;
-    boolean isEaten;
+
    public BufferedImage image;
     String name;
 
     public Points() {
     }
 
-    ;
+
 
     public Points(int positionX, int positionY, String name, int points) {
         ImageLoader loader = ImageLoader.getInstance();
@@ -31,9 +29,7 @@ public class Points extends GameEntity {
 
 
 
-    public int eaten() {
-        return 0;
-    }
+
 
     public void setSolidArea() {
         solidArea.x = 0;

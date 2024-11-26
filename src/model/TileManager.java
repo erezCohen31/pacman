@@ -31,7 +31,7 @@ public class TileManager {
     }
 
     public void getTileImage() {
-        try {
+
             ImageLoader loader = ImageLoader.getInstance();
             tile[0] = new Tile(loader.loadImage("/walls/black.png"), true, true);
             tile[1] = new Tile(loader.loadImage("/walls/black.png"), false,false);
@@ -54,9 +54,7 @@ public class TileManager {
 
             tile[14] = new Tile(loader.loadImage("/walls/ch.png"), true,true);
             tile[15] = new Tile(loader.loadImage("/walls/cb.png"), true,true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 
     public void loadMap(String filePath) throws IOException {

@@ -8,8 +8,6 @@ public class GameController {
     private final FruitManager fruitManager = new FruitManager();
     private final GameMap gameMap = new GameMap();
 
-    private final int FPS = 60;
-
     public void startGame() {
         System.out.println("Game started");
         gameMap.setPellets();
@@ -37,7 +35,7 @@ public class GameController {
     }
 
     public int getFPS() {
-        return FPS;
+        return 60;
     }
 
 }
