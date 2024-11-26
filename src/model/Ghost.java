@@ -239,7 +239,7 @@ public abstract class Ghost extends GameEntity {
             List<Point> directions = toPoint();
             if (!directions.isEmpty()) {
                 // Trouve la direction qui rapproche le plus de la cible
-                Point bestDirection = directions.get(0);
+                Point bestDirection = directions.getFirst();
                 double minDistance = bestDirection.distance(target);
 
                 for (Point newPos : directions) {

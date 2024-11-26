@@ -60,6 +60,7 @@ public class TileManager {
     public void loadMap(String filePath) throws IOException {
         try {
             InputStream is = getClass().getResourceAsStream(filePath);
+            assert is != null;
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             int col = 0;
             int row = 0;

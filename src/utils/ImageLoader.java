@@ -46,7 +46,5 @@ public class ImageLoader {
         }
     }
     
-    public void clearCache() {
-        imageCache.clear();
-    }
+
 }

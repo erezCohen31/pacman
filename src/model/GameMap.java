@@ -4,6 +4,7 @@ import model.ghosts.Blinky;
 import model.ghosts.Clyde;
 import model.ghosts.Inky;
 import model.ghosts.Pinky;
+import utils.ImageLoader;
 import view.GameWindow;
 
 import javax.imageio.ImageIO;
@@ -66,21 +67,19 @@ public class GameMap {
 
     }
     public void setGhosts() {
-        ghosts = new java.util.ArrayList<Ghost>();
+        ghosts = new java.util.ArrayList<>();
         ghosts.add(new Blinky("blinky", 9 * GameWindow.TILE_SIZE,14* GameWindow.TILE_SIZE ));
         ghosts.add(new Pinky("pinky", 11* GameWindow.TILE_SIZE,14* GameWindow.TILE_SIZE ));
         ghosts.add(new Inky("inky", 13* GameWindow.TILE_SIZE,14* GameWindow.TILE_SIZE ));
         ghosts.add(new Clyde("clyde", 15* GameWindow.TILE_SIZE,14* GameWindow.TILE_SIZE ));
     }
     private void loadPHearthImage() {
-        try {
+        ImageLoader loader = ImageLoader.getInstance();
 
-            hearthImage = ImageIO.read(getClass().getResourceAsStream("/hearth/coeur.png"));
+            hearthImage = loader.loadImage("/hearth/coeur.png");
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
 }
