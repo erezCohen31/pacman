@@ -1,9 +1,7 @@
-package model;
+package model.ghosts;
 
+import model.Ghost;
 import view.GameWindow;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class Blinky extends Ghost {
     public Blinky(String name, int posX, int posY) {

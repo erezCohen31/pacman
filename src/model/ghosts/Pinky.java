@@ -1,8 +1,7 @@
-package model;
+package model.ghosts;
 
+import model.Ghost;
 import view.GameWindow;
-
-import java.awt.*;
 
 public class Pinky extends Ghost {
     public Pinky(String name, int posX,int posY) {

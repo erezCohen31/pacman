@@ -1,9 +1,7 @@
-package model;
+package model.ghosts;
 
+import model.Ghost;
 import view.GameWindow;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class Clyde extends Ghost {
     public Clyde(String name, int posX, int posY) {
@@ -12,7 +10,11 @@ public class Clyde extends Ghost {
 
     @Override
     public void chaseMode() {
-
+        if (pos.distance(pacMan.pos) <= 192) {
+            target.setLocation(BASE_POS);
+        } else {
+            target.setLocation(pacMan.pos);
+        }
     }
 
     @Override

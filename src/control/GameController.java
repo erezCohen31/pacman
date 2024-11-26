@@ -32,7 +32,8 @@ public class GameController {
     }
 
     public boolean isGameOver() {
-        return pacMan.getLives() == 0;
+
+        return pacMan.getLives() == 0||GameMap.mapPellet.isEmpty();
     }
 
     public int getFPS() {

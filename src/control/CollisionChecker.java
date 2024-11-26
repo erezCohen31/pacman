@@ -127,6 +127,7 @@ public class CollisionChecker {
                 pacMan.solidArea.height
         );
 
+
         return ghostSolidArea.intersects(pacManSolidArea);
     }
 

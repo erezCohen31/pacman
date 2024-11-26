@@ -1,5 +1,9 @@
 package model;
 
+import model.ghosts.Blinky;
+import model.ghosts.Clyde;
+import model.ghosts.Inky;
+import model.ghosts.Pinky;
 import view.GameWindow;
 
 import javax.imageio.ImageIO;
@@ -38,16 +42,18 @@ public class GameMap {
             for (int j = 5; j < 28; j++) {
                 if (TileManager.mapTileNum[i][j] == 1||TileManager.mapTileNum[i][j] == 17) {
 
+                    Pellet smallPellet = new Pellet(i, j, 10, Pellet.PelletType.SMALL);
 
-                    yPellet.put(j, new Pellet(i, j, 10));
+                    yPellet.put(j, smallPellet);
 
                     yPellet.get(j).setSolidArea();
 
 
                 } else if (TileManager.mapTileNum[i][j] == 16) {
 
+                    Pellet bigPellet = new Pellet(i, j, 50, Pellet.PelletType.BIG);
 
-                    yPellet.put(j, new BigPellet(i, j, 50));
+                    yPellet.put(j, bigPellet);
 
                     yPellet.get(j).setSolidArea();
 

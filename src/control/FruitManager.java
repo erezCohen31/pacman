@@ -1,15 +1,22 @@
-package model;
+package control;
 
+import model.GameMap;
+import model.PacMan;
+import model.Points;
+import model.TileManager;
+
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class FruitManager {
 
     private Random random = new Random();
     public Map<String, Integer> fruitList = new HashMap<>();
     List<String> fruitListName = new ArrayList<>();
-    public final static List<Pair> fruitPosition = new ArrayList<>();
+    public final static List<Point> fruitPosition = new ArrayList<>();
     private Timer despawnTimer;
-    Pair currentFruitPosition;
+    Point currentFruitPosition;
     Points currentFruit=new Points();
 
 
@@ -20,7 +27,7 @@ public class FruitManager {
             Set<Integer> keys = GameMap.mapPellet.get(i).keySet();
             for (int key:keys ) {
                 if (GameMap.mapPellet.get(i).get(key) == null && TileManager.mapTileNum[i][key] == 1) {
-                    fruitPosition.add(new Pair(i, key));
+                    fruitPosition.add(new Point(i, key));
                 }
             }
         }
@@ -57,13 +64,13 @@ public class FruitManager {
              currentFruitPosition = fruitPosition.get(randomPosition);
             // Créer et positionner un fruit
             String name = getRandomFruit();
-            Points fruit = new Points(currentFruitPosition.getX(), currentFruitPosition.getY(), name, fruitList.get(name));
+            Points fruit = new Points(currentFruitPosition.x, currentFruitPosition.y, name, fruitList.get(name));
             fruit.setSolidArea();
             Map<Integer, Points> posY = new HashMap<>();
-            posY.put(currentFruitPosition.getY(), fruit);
-            GameMap.mapPellet.get(currentFruitPosition.getX()).put(currentFruitPosition.getY(), fruit);
+            posY.put(currentFruitPosition.y, fruit);
+            GameMap.mapPellet.get(currentFruitPosition.x).put(currentFruitPosition.y, fruit);
             startDespawnTimer(() -> {
-                GameMap.mapPellet.get(currentFruitPosition.getX()).put(currentFruitPosition.getY(), null);
+                GameMap.mapPellet.get(currentFruitPosition.x).put(currentFruitPosition.y, null);
                 System.out.println("Fruit disparu !");
             });
             return fruit;
@@ -91,7 +98,7 @@ return null;
     private void despawn() {
         if (despawnTimer != null) {
             despawnTimer.cancel();
-            GameMap.mapPellet.get(currentFruitPosition.getX()).put(currentFruitPosition.getY(),null);
+            GameMap.mapPellet.get(currentFruitPosition.x).put(currentFruitPosition.y,null);
         }
     }
 public void appearFruit(){   if (PacMan.score > 0 && PacMan.score % 100 == 0) {

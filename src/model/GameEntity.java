@@ -11,7 +11,7 @@ import java.util.Map;
 public abstract class GameEntity {
 
     public int speed;
-    Point pos = new Point();
+    public Point pos = new Point();
     public enum Direction {
         UP, DOWN, LEFT, RIGHT
     }

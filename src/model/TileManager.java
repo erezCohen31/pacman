@@ -1,9 +1,8 @@
 package model;
 
-
 import view.GameWindow;
+import utils.ImageLoader;
 
-import javax.imageio.ImageIO;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,8 +20,9 @@ public class TileManager {
         mapTileNum = new int[gw.getCOL()][gw.getROW()];
         getTileImage();
 
+
         try {
-            loadMap("/model/pac_man_panel.txt");
+            loadMap("/map/pac_man_panel.txt");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -32,35 +32,29 @@ public class TileManager {
 
     public void getTileImage() {
         try {
-            tile[0] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/black.png")), true, true);
-            tile[1] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/black.png")), false,false);
-            tile[16] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/black.png")), false,false);
-            tile[17] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/black.png")), false,true);
-            tile[2] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/horizontal.png")), true,true);
-            tile[3] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/vertical.png")), true,true);
-            tile[4] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/db.png")), true,true);
-            tile[5] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/dh.png")), true,true);
-            tile[6] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/gb.png")), true,true);
-            tile[7] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/gh.png")), true,true);
+            ImageLoader loader = ImageLoader.getInstance();
+            tile[0] = new Tile(loader.loadImage("/walls/black.png"), true, true);
+            tile[1] = new Tile(loader.loadImage("/walls/black.png"), false,false);
+            tile[16] = new Tile(loader.loadImage("/walls/black.png"), false,false);
+            tile[17] = new Tile(loader.loadImage("/walls/black.png"), false,true);
+            tile[2] = new Tile(loader.loadImage("/walls/horizontal.png"), true,true);
+            tile[3] = new Tile(loader.loadImage("/walls/vertical.png"), true,true);
+            tile[4] = new Tile(loader.loadImage("/walls/db.png"), true,true);
+            tile[5] = new Tile(loader.loadImage("/walls/dh.png"), true,true);
+            tile[6] = new Tile(loader.loadImage("/walls/gb.png"), true,true);
+            tile[7] = new Tile(loader.loadImage("/walls/gh.png"), true,true);
 
-            tile[8] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/pd.png")), true,true);
-            tile[9] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/pg.png")), true,true);
+            tile[8] = new Tile(loader.loadImage("/walls/pd.png"), true,true);
+            tile[9] = new Tile(loader.loadImage("/walls/pg.png"), true,true);
 
-            tile[10] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/ph.png")), true,true);
-            tile[11] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/pb.png")), true,true);
-            tile[12] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/cd.png")), true,true);
-            tile[13] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/cg.png")), true,true);
+            tile[10] = new Tile(loader.loadImage("/walls/ph.png"), true,true);
+            tile[11] = new Tile(loader.loadImage("/walls/pb.png"), true,true);
+            tile[12] = new Tile(loader.loadImage("/walls/cd.png"), true,true);
+            tile[13] = new Tile(loader.loadImage("/walls/cg.png"), true,true);
 
-            tile[14] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/ch.png")), true,true);
-            tile[15] = new Tile(ImageIO.read(getClass().getResourceAsStream("/walls/cb.png")), true,true);
-
-
-
-
-
-
-
-        } catch (IOException e) {
+            tile[14] = new Tile(loader.loadImage("/walls/ch.png"), true,true);
+            tile[15] = new Tile(loader.loadImage("/walls/cb.png"), true,true);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

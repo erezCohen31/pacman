@@ -2,6 +2,7 @@ package model;
 
 import control.CollisionChecker;
 import control.InputHandler;
+import utils.ImageLoader;
 import view.GameWindow;
 
 import javax.imageio.ImageIO;
@@ -22,9 +23,11 @@ public abstract class Ghost extends GameEntity {
     private static final int ESCAPE_MODE_DURATION = 20000; // 20 secondes en millisecondes
 
     String name;
-    final Point BASE_POS;
-    Point target;
-    PacMan pacMan;
+    public int point = 200;
+     public boolean isPoint;
+    protected final Point BASE_POS;
+    protected Point target;
+    protected PacMan pacMan;
     Point shortPath;
     Point prevPos;
     Map<String, Point> mapDirection = new HashMap<>();
@@ -46,7 +49,7 @@ public abstract class Ghost extends GameEntity {
 
     Point goodDirection;
 
-    public Ghost(String name, int posX,int posY) {
+    public Ghost(String name, int posX, int posY) {
         cChecker = new CollisionChecker(GameWindow.getInstance());
         this.name = name;
         this.BASE_POS = new Point(posX, posY);
@@ -104,6 +107,7 @@ public abstract class Ghost extends GameEntity {
         // Active le mode escape
         currentMode = GhostMode.ESCAPE;
         escapeMode = true;
+        isPoint=true;
         escapeMode();
 
         // Crée un nouveau timer pour revenir au mode précédent
@@ -114,7 +118,7 @@ public abstract class Ghost extends GameEntity {
                 escapeMode = false;
                 currentMode = GhostMode.CHASE;
                 chaseMode();
-                
+
                 // Démarre un nouveau timer pour alterner entre chase et scatter
                 if (behaviorTimer != null) {
                     behaviorTimer.cancel();
@@ -138,8 +142,7 @@ public abstract class Ghost extends GameEntity {
         }, ESCAPE_MODE_DURATION);
     }
 
-    @Override
-    protected void finalize() throws Throwable {
+    @Override protected void finalize() throws Throwable {
         if (behaviorTimer != null) {
             behaviorTimer.cancel();
         }
@@ -147,10 +150,6 @@ public abstract class Ghost extends GameEntity {
             escapeTimer.cancel();
         }
         super.finalize();
-    }
-
-    public boolean isVulnerable() {
-        return currentMode == GhostMode.ESCAPE;
     }
 
     public void setSolidArea() {
@@ -162,19 +161,18 @@ public abstract class Ghost extends GameEntity {
     }
 
     private void loadPlayerImage() {
-        try {
+        ImageLoader loader = ImageLoader.getInstance();
+
             for (Direction dir : Direction.values()) {
                 BufferedImage image;
 
-                image = ImageIO.read(getClass().getResourceAsStream("/ghosts/" + name + "_" + dir.name().toLowerCase() + ".png"));
+                image = loader.loadImage("/ghosts/" + name + "_" + dir.name().toLowerCase() + ".png");
                 directionImage.put(dir, image);
             }
-            afraidImage = ImageIO.read(getClass().getResourceAsStream("/ghosts/afraid.png"));
-            eyeImage = ImageIO.read(getClass().getResourceAsStream("/ghosts/eyeGhost.png"));
+            afraidImage = loader.loadImage("/ghosts/afraid.png");
+            eyeImage = loader.loadImage("/ghosts/eyeGhost.png");
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public void setMapDirection() {
@@ -190,7 +188,6 @@ public abstract class Ghost extends GameEntity {
 
     private void escapeMode() {
         // Inverse la direction (rotation 180 degrés) uniquement au début du mode escape
-
         switch (direction) {
             case UP -> direction = Direction.DOWN;
             case DOWN -> direction = Direction.UP;
@@ -200,26 +197,33 @@ public abstract class Ghost extends GameEntity {
 
         // Change la direction aléatoirement
         if (Math.random() < 0.05 || shortPath == null) { // 5% de chance ou si pas de destination
-            Direction[] possibleDirections = Direction.values();
-            direction = possibleDirections[new Random().nextInt(possibleDirections.length)];
+            List<Point> validDirections = toPoint(); // Obtenir les directions valides
 
-            // Trouve une nouvelle position valide sur la map
-            int randomX = new Random().nextInt(0, 24);
-            int randomY = new Random().nextInt(4, 28);
-            Point newTarget = new Point(randomX * GameWindow.TILE_SIZE, randomY * GameWindow.TILE_SIZE);
-
-            // Vérifie si la position est accessible
-            if (TileManager.mapTileNum[randomX][randomY] == 1) {
-                shortPath = newTarget;
+            if (!validDirections.isEmpty()) {
+                // Choisir une direction aléatoire parmi les directions valides
+                int randomIndex = new Random().nextInt(validDirections.size());
+                shortPath = validDirections.get(randomIndex);
+                updateDirection();
+            } else {
+                // Si aucune direction valide, continuer dans la direction actuelle
+                continueCurrentDirection();
             }
         }
 
-        // Si pas de chemin valide, continue dans la direction actuelle
-        if (shortPath == null) {
-            move();
-        } else {
-            // Met à jour la direction vers la destination
-            updateDirection();
+        // Mettre à jour la position
+        if (shortPath != null) {
+            // Vérifier si la nouvelle position est valide
+            if (!cChecker.checkTile(this)) {
+                move();
+            } else {
+                // Si collision détectée, trouver une nouvelle direction
+                List<Point> validDirections = toPoint();
+                if (!validDirections.isEmpty()) {
+                    int randomIndex = new Random().nextInt(validDirections.size());
+                    shortPath = validDirections.get(randomIndex);
+                    updateDirection();
+                }
+            }
         }
     }
 
@@ -231,14 +235,10 @@ public abstract class Ghost extends GameEntity {
     }
 
     public void findShortPath() {
-        // Si le fantôme est mangé, on force la cible vers la base
-//        if (isEaten) {
-//            target.setLocation(BASE_POS);
-//        }
-
-        // Ne cherche une nouvelle direction qu'aux intersections de la grille
-
-        if (pos.x % TILE_SIZE == 0 && pos.y % TILE_SIZE == 0|| isEaten) {
+        if (currentMode == GhostMode.CHASE) {
+            chaseMode();
+        }
+        if (pos.x % TILE_SIZE == 0 && pos.y % TILE_SIZE == 0 || isEaten) {
             List<Point> directions = toPoint();
             if (!directions.isEmpty()) {
                 // Trouve la direction qui rapproche le plus de la cible
@@ -287,8 +287,8 @@ public abstract class Ghost extends GameEntity {
     public List<Point> toPoint() {
         List<Point> trueDirection = new ArrayList<>();
         List<String> direction = cChecker.getDirection(this);
-        for (int i = 0; i < direction.size(); i++) {
-            Point point = new Point(mapDirection.get(direction.get(i)).x + pos.x, mapDirection.get(direction.get(i)).y + pos.y); //mapDirection.get(direction.get(i));
+        for (String s : direction) {
+            Point point = new Point(mapDirection.get(s).x + pos.x, mapDirection.get(s).y + pos.y); //mapDirection.get(direction.get(i));
             trueDirection.add(point);
         }
         return trueDirection;
@@ -317,9 +317,9 @@ public abstract class Ghost extends GameEntity {
 
         // Check if eaten and reached base
         if (isEaten && pos.equals(BASE_POS)) {
-            escapeMode=false;
+            escapeMode = false;
             isEaten = false;
-            speed=DEFAULT_SPEED;
+            speed = DEFAULT_SPEED;
 
             resetBehavior(); // Reset to same mode as other ghosts
         } else if (collisionPacMan && escapeMode) {
@@ -332,8 +332,5 @@ public abstract class Ghost extends GameEntity {
         collisionPacMan = cChecker.checkGhostCollision(this, pacMan);
     }
 
-    public int eaten() {
-        return 0;
-    }
 
 }

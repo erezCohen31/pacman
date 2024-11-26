@@ -1,5 +1,6 @@
 package model;
 
+import utils.ImageLoader;
 import view.GameWindow;
 
 import javax.imageio.ImageIO;
@@ -18,14 +19,11 @@ public class Points extends GameEntity {
     ;
 
     public Points(int positionX, int positionY, String name, int points) {
+        ImageLoader loader = ImageLoader.getInstance();
         this.setPositionX(positionX);
         this.setPositionY(positionY);
         this.name = name;
-        try {
-            image = ImageIO.read(getClass().getResourceAsStream("/fruits/" + name + ".png"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        image = loader.loadImage("/fruits/" + name + ".png");
         this.points = points;
         collisionOn = true;
 

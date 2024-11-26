@@ -3,6 +3,7 @@ package model;
 import control.CollisionChecker;
 import control.GameController;
 import control.InputHandler;
+import utils.ImageLoader;
 import view.GameWindow;
 
 import javax.imageio.ImageIO;
@@ -64,7 +65,12 @@ public class PacMan extends GameEntity {
                 if (GameMap.ghosts.get(i).collisionPacMan && !GameMap.ghosts.get(i).escapeMode) {
                     eaten();
 
+
                     GameMap.listHearth.removeLast();
+                }
+                if (GameMap.ghosts.get(i).collisionPacMan && GameMap.ghosts.get(i).isPoint) {
+                    score += GameMap.ghosts.get(i).point;
+                    GameMap.ghosts.get(i).isPoint=false;
                 }
             }
 
@@ -130,18 +136,15 @@ public class PacMan extends GameEntity {
     }
 
     private void loadPlayerImage() {
-        try {
-            for (Direction dir : Direction.values()) {
-                BufferedImage[] images = new BufferedImage[3];
-                for (int i = 0; i < 3; i++) {
-                    images[i] = ImageIO.read(getClass().getResourceAsStream("/pacmans/pac_man_" + dir.name().toLowerCase() + "_" + (i + 1) + ".png"));
-                }
-                if (images[0] != null && images[1] != null && images[2] != null) {
-                    directionImages.put(dir, images);
-                }
+        ImageLoader loader = ImageLoader.getInstance();
+        for (Direction dir : Direction.values()) {
+            BufferedImage[] images = new BufferedImage[3];
+            for (int i = 0; i < 3; i++) {
+                images[i] = loader.loadImage("/pacman/pac_man_" + dir.name().toLowerCase() + "_" + (i + 1) + ".png");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            if (images[0] != null && images[1] != null && images[2] != null) {
+                directionImages.put(dir, images);
+            }
         }
     }
 

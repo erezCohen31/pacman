@@ -1,7 +1,6 @@
 
 package control;
 
-import model.FruitManager;
 import view.GameWindow;
 
 public class GameLoop implements Runnable {
