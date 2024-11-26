@@ -29,8 +29,7 @@ public class CollisionChecker {
 
         int tileNum1, tileNum2;
 
-        if (entity instanceof PacMan) {
-            PacMan pacMan = (PacMan) entity;
+        if (entity instanceof PacMan pacMan) {
             switch (pacMan.direction) {
                 case UP:
                     entityTopRow = (entityTopWorldY - entity.speed) / gw.getTileSize();

@@ -1,6 +1,6 @@
 package model;
 
-import view.GameWindow;
+
 import utils.ImageLoader;
 
 public class Pellet extends Points {

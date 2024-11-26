@@ -16,7 +16,7 @@ public class PacMan extends GameEntity {
     private final GameWindow gameWindow;
     private final InputHandler inputHandler;
 
-    private boolean gameOver = false;
+
 
 
 
@@ -143,9 +143,6 @@ public class PacMan extends GameEntity {
         }
     }
 
-    public void initCollisionChecker() {
-        cChecker = new CollisionChecker(gameWindow);
-    }
 
     public void eaten() {
         lives--;

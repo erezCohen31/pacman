@@ -11,7 +11,7 @@ import java.util.List;
 
 public class FruitManager {
 
-    private Random random = new Random();
+    private final Random random = new Random();
     public Map<String, Integer> fruitList = new HashMap<>();
     List<String> fruitListName = new ArrayList<>();
     public final static List<Point> fruitPosition = new ArrayList<>();

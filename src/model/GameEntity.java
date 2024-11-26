@@ -1,8 +1,6 @@
 package model;
 
 import control.CollisionChecker;
-import view.GameWindow;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -50,9 +48,6 @@ public abstract class GameEntity {
 
 
 
-    public void setPosition(int positionX, int positionY) {
-        this.pos.x = positionX;
-        this.pos.y = positionY;
-    }
+
 
 }
